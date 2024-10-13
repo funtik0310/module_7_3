@@ -8,9 +8,8 @@ class WordsFinder:
         for file_name in self.file_name:
             with open(file_name, 'r', encoding='utf-8') as file:
                 info = file.read().lower()
-                punctuation = [',', '.', '=', '!', '?', ';', ':', ' - ']
-                for sings in punctuation:
-                    info.replace(sings, '')
+                for sings in [',', '.', '=', '!', '?', ';', ':', ' - ']:
+                    info = info.replace(sings, '')
                 words = info.split()
                 all_words[file_name] = words
         return all_words
@@ -20,12 +19,14 @@ class WordsFinder:
             if word.lower() in value:
                 places[key] = value.index(word.lower()) + 1
         return places
+
     def count(self, word):
-        counters = {}
-        for value, key in self.get_all_words().items():
-            words_count = key.count(word.lower())
-            counters[value] = words_count
-        return counters
+        all_words = self.get_all_words()
+        result = {}
+        for file_name, words in all_words.items():
+            result[file_name] = words.count(word)
+        return result
+
 
 finder2 = WordsFinder('test.txt')
 print(finder2.get_all_words()) # Все слова
